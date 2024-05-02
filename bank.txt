@@ -1,0 +1,42 @@
+structure Users:
+    name (Done), ID(auto) (Done), balance (Done), Account creation date
+
+
+main menu: (Done)
+    1. Login (Done)
+    2. Create account (Done)
+    3. Exit (Done)
+
+
+Sign up: (done)
+    input user name (Done), input new password (Done)
+
+
+Login: (Done)
+    username (Done), password (Done)
+
+
+Login menu: (Done)
+    1. View Balance (Done)
+    2. Add money (Done)
+    3. Withdraw money (Done)
+    4. Logout (Done) 
+    5. Update info (Done)
+    5. Delete account (Done)
+
+
+!!! program close holeo jeno info save thake.. so info gula file e save rakhte hobe (Done)
+
+features:
+    update by ID (Done)
+    update by username
+
+Delete:
+    delete accounts that hold 200 tk or less in their balance (Done)
+    Delete by ID (Done)
+    delete by username
+
+update features:
+    update Name (Done)
+    update username (Done)
+    update password (Done)
