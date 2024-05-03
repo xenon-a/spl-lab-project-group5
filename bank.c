@@ -31,7 +31,7 @@ int get_user_count()
 
     if (usersdb==NULL)
         return 0;
-    
+
     fseek(usersdb, 0, SEEK_END);
     int count = ftell(usersdb) / sizeof(struct User);
     fclose(usersdb);
@@ -78,7 +78,7 @@ void show_db()
             printf("User ID: %d\n", users[i].id);
             printf("Username: %s\n", users[i].username);
             printf("Password: %s", users[i].pass);
-            printf("Balance: %.2f\n\n", users[i].balance);
+            printf("Balance: %.2f BDT\n\n", users[i].balance);
         }
     }
 }
@@ -90,10 +90,10 @@ void show_info()
     struct User users[total];
     readFromFile(users, total);
 
-    printf("\n\nName: %s", users[user_index].name);
+    printf("\n\nOwner Name: %s", users[user_index].name);
     printf("Username: %s\n", users[user_index].username);
     printf("User ID: %d\n", users[user_index].id);
-    printf("Balance: %.2f\n\n", users[user_index].balance);
+    printf("Balance: %.2f BDT\n\n", users[user_index].balance);
 }
 
 int get_user_index(char username[], int check)
@@ -192,11 +192,12 @@ void updateAccount()
     struct User users[total];
     readFromFile(users, total);
     updateMenu:
-        printf("--Please choose what you want to update: --\n");
+        printf("\n----Please choose what you want to update: ----\n\n");
         printf("1. Name\n");
         printf("2. Username\n");
         printf("3. Password\n");
         printf("4. Save changes and return to account menu\n");
+        printf("5. Discard changes and return to account menu\n");
     int choice;
     printf(">>> ");
     scanf("%d", &choice);
@@ -207,7 +208,7 @@ void updateAccount()
         printf("Enter new name: ");
         fgets(newname, 256, stdin);
         strcpy(users[user_index].name, newname);
-        printf("\n---Changed Name of the owner successfully!---\n\n");
+        printf("\n---Name of the owner has been changed successfully!---\n\n");
         goto updateMenu;
     }
     else if (choice==2){
@@ -220,7 +221,7 @@ void updateAccount()
         }
         else {
             strcpy(users[user_index].username, newusername);
-            printf("---Succesfully changed your username---\n");
+            printf("\n---Succesfully changed your username---\n\n");
         }
         goto updateMenu;
     }
@@ -261,8 +262,11 @@ void updateAccount()
         updatedb(users, total);
         printf("---Changes saved successfully---\n\n");
     }
+    else if (choice==5){
+        printf("\n---Changes were not saved to your account---\n\n");
+    }
     else {
-        printf("Invalid choice!!!\n");
+        printf("\nInvalid choice!!!\n\n");
         goto updateMenu;
     }
 }
@@ -274,7 +278,7 @@ void addMoney()
     float amount;
     scanf("%f", &amount);
     getchar();
-    
+
     int total = get_user_count();
     struct User users[total];
 
@@ -294,14 +298,14 @@ void takeMoney()
     printf(">>> ");
     float amount;
     scanf("%f", &amount);
-    
+
     int total = get_user_count();
     struct User users[total];
 
     readFromFile(users, total);
 
     if (users[user_index].balance < amount)
-        printf("---Not Enough Balance!!!---\n");
+        printf("\n---Not Enough Balance!!!---\n\n");
     else {
         users[user_index].balance -= amount;
         updatedb(users, total);
@@ -319,7 +323,8 @@ void check_balance()
 
     printf("\n------------\n");
     printf("Account Owner: %s", users[user_index].name);
-    printf("Current Balance: %.2f\n", users[user_index].balance);
+    printf("Current Balance: %.2f BDT", users[user_index].balance);
+    printf("\n------------\n\n");
 }
 
 
@@ -335,7 +340,7 @@ int login()
     int index = get_user_index(username, -1);
 
     if (index==-1){
-        printf("User not found! You can create an account from the main menu.\n");
+        printf("\n---User not found! You can create an account from the main menu---\n\n");
         return -1;
     }
     else {
@@ -351,14 +356,14 @@ int login()
             fgets(pass, 64, stdin);
 
             if (strcmp(pass, users[index].pass)!=0){
-                printf("Incorrect Password!\n");
+                printf("\nIncorrect Password!");
                 chances--;
                 if (chances<=0){
-                    printf("!!!Access Denied!!\n");
+                    printf("!!!Access Denied!!\n\n");
                     return -1;
                 }
                 else {
-                    printf("%d Attempts left!\n", chances);
+                    printf("%d Attempts left!\n\n", chances);
                 }
             }
             else {
@@ -385,7 +390,7 @@ void signup()
     int index = get_user_index(newUser.username, -1);
 
     if (index!=-1){
-        printf("!!Username already exists!\n");
+        printf("\n!!Username already exists!\n\n");
         int choice;
         userexists:
             printf("1. Choose different username\n");
@@ -397,7 +402,7 @@ void signup()
         else if (choice == 2)
             return;
         else
-            printf("!!Invalid choice!!!\n");
+            printf("\n!!Invalid choice!!!\n\n");
             goto userexists;
     }
 
@@ -410,7 +415,7 @@ void signup()
         fgets(confirm, 64, stdin);
 
     if (strcmp(newUser.pass, confirm)!=0){
-        printf("Passwords didn't match!!! Try again.\n");
+        printf("\nPasswords didn't match!!! Try again.\n\n");
         goto choosepass;
     }
 
@@ -426,7 +431,7 @@ int main()
 {
     int choice;
     printf("\n\n\n---------------Welcome to Simple Bank-------------\n\n");
-    printf("Please enter the number corresponding to your desired action: \n");
+    printf("Please enter the number corresponding to your desired action: \n\n");
 
     while (1)
     {
@@ -462,7 +467,7 @@ int main()
                 }
             }
             else
-                printf("!!Invalid choice!!\n");
+                printf("\n!!Invalid choice!!\n\n");
         }
         else if (user_index != -1 && admin == 0) {
             printf("-------------Account Actions-----------\n");
@@ -498,7 +503,7 @@ int main()
                 user_index = -1;
             }
             else if (choice==7){
-                printf("--Are you sure?--\n");
+                printf("\n--Are you sure?--\n");
                 printf("1. Yes\n");
                 printf("2. No\n");
                 int deletion_choice;
@@ -510,7 +515,7 @@ int main()
                 }
             }
             else {
-                printf("!!!Invalid Choice!!!\n");
+                printf("\n!!!Invalid Choice!!!\n\n");
             }
         }
         else {
@@ -548,12 +553,12 @@ int main()
                 user_index = -1;
             }
             else {
-                printf("Invalid choice!!!\n\n");
+                printf("\nInvalid choice!!!\n\n");
             }
         }
     }
 
-    printf("Thank you for using our sevice! Exiting...");
+    printf("Thank you for using our service! Exiting...");
 
     return 0;
 }
