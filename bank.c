@@ -121,7 +121,9 @@ int get_user_index(char username[], int check)
 void addUser(struct User user)
 {
     FILE *usersdb = fopen("usersdb.dat", "ab");
+
     fwrite(&user, sizeof(struct User), 1, usersdb);
+
     fclose(usersdb);
 }
 
