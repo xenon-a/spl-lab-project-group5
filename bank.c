@@ -53,8 +53,10 @@ void readFromFile(struct User *users, int count)
 int generate_id()
 {
     int total = get_user_count();
+
     if (total<1)
         return 1;
+
     struct User users[total];
 
     readFromFile(users, total);
@@ -145,7 +147,28 @@ int get_index_by_id()
         }
     }
 
-    printf("\nNo user with that ID was found in the database!!!\n\n");
+    printf("\n!!!No user with that ID was found in the database!!!\n\n");
+    return -1;
+}
+
+int get_index_by_username()
+{
+    char username[64];
+    printf("Enter the username of the user: \n");
+    printf(">>> ");
+    scanf("%s", username);
+
+    int total = get_user_count();
+    struct User users[total];
+    readFromFile(users, total);
+
+    for (int i=0; i<total; i++){
+        if (strcmp(users[i].username, username)==0){
+            return i;
+        }
+    }
+
+    printf("\n!!!No user with that username was found in the database!!!\n\n");
     return -1;
 }
 
@@ -172,7 +195,7 @@ void auto_delete_accounts()
 
 void deleteUser()
 {
-    printf("Deleting account...\n");
+    printf("\nDeleting account...\n");
     int total = get_user_count();
     struct User users[total];
     readFromFile(users, total);
@@ -185,7 +208,7 @@ void deleteUser()
 
     updatedb(users, total-1);
 
-    printf("Deleted the account successfully!!\n");
+    printf("---Deleted the account successfully!!\n\n");
 }
 
 void updateAccount()
@@ -198,8 +221,8 @@ void updateAccount()
         printf("1. Name\n");
         printf("2. Username\n");
         printf("3. Password\n");
-        printf("4. Save changes and return to account menu\n");
-        printf("5. Discard changes and return to account menu\n");
+        printf("4. Save changes and return\n");
+        printf("5. Discard changes and return\n");
     int choice;
     printf(">>> ");
     scanf("%d", &choice);
@@ -223,7 +246,7 @@ void updateAccount()
         }
         else {
             strcpy(users[user_index].username, newusername);
-            printf("\n---Succesfully changed your username---\n\n");
+            printf("\n---Succesfully changed the username---\n\n");
         }
         goto updateMenu;
     }
@@ -260,12 +283,12 @@ void updateAccount()
         }
     }
     else if (choice==4){
-        printf("\n---Saving changes to your account---\n");
+        printf("\n---Saving changes to this account---\n");
         updatedb(users, total);
         printf("---Changes saved successfully---\n\n");
     }
     else if (choice==5){
-        printf("\n---Changes were not saved to your account---\n\n");
+        printf("\n---Changes were not saved---\n\n");
     }
     else {
         printf("\nInvalid choice!!!\n\n");
@@ -332,6 +355,7 @@ void check_balance()
 
 int login()
 {
+    printf("\n--------------Login---------------\n\n");
     char username[64];
     char pass[64];
 
@@ -358,7 +382,7 @@ int login()
             fgets(pass, 64, stdin);
 
             if (strcmp(pass, users[index].pass)!=0){
-                printf("\nIncorrect Password!");
+                printf("\nIncorrect Password! ");
                 chances--;
                 if (chances<=0){
                     printf("!!!Access Denied!!\n\n");
@@ -379,6 +403,7 @@ int login()
 
 void signup()
 {
+    printf("\n-----------Sign up-----------\n\n");
     struct User newUser;
 
     printf("Enter your name: ");
@@ -524,9 +549,11 @@ int main()
             printf("\n---------Admin Panel----------\n");
             printf("1. Show Database\n");
             printf("2. Delete account by ID\n");
-            printf("3. Delete accounts with balance less than 200 Tk\n");
-            printf("4. Update account by ID\n");
-            printf("5. Close admin panel\n");
+            printf("3. Delete account by username\n");
+            printf("4. Auto Delete accounts with balance less than 200 Tk\n");
+            printf("5. Update account by ID\n");
+            printf("6. Update account by username\n");
+            printf("7. Close admin panel\n");
 
             printf(">>> ");
             scanf("%d", &choice);
@@ -541,15 +568,27 @@ int main()
                 user_index = -1;
             }
             else if (choice==3){
-                auto_delete_accounts();
+                user_index = get_index_by_username();
+                if (user_index!=-1)
+                    deleteUser();
+                user_index = -1;
             }
             else if (choice==4){
+                auto_delete_accounts();
+            }
+            else if (choice==5){
                 user_index = get_index_by_id();
                 if (user_index!=-1)
                     updateAccount();
                 user_index = -1;
             }
-            else if (choice==5){
+            else if (choice==6){
+                user_index = get_index_by_username();
+                if (user_index!=-1)
+                    updateAccount();
+                user_index = -1;
+            }
+            else if (choice==7){
                 printf("Closing admin panel...\n\n");
                 admin = 0;
                 user_index = -1;

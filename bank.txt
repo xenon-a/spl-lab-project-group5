@@ -1,5 +1,21 @@
+------------------- Outline --------------------
+
+
+Create: (Done)
+    Rimel
+
+Read: (Done)
+    Sadia
+
+Update: (Done)
+    Ador
+
+Delete + Main menu: (Done)
+    Sumaiya
+
+
 structure Users:
-    name (Done), ID(auto) (Done), balance (Done), Account creation date
+    name (Done), ID (Done), balance (Done), Account creation date (pari nai)
 
 
 main menu: (Done)
@@ -29,12 +45,12 @@ Login menu: (Done)
 
 features:
     update by ID (Done)
-    update by username
+    update by username (Done)
 
 Delete:
     delete accounts that hold 200 tk or less in their balance (Done)
     Delete by ID (Done)
-    delete by username
+    delete by username (Done)
 
 update features:
     update Name (Done)
